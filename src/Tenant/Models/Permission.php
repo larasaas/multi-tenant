@@ -1,0 +1,116 @@
+<?php
+
+namespace Larasaas\Tenant\Models;
+
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\Traits\RefreshesPermissionCache;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Permission\Exceptions\PermissionAlreadyExists;
+use Spatie\Permission\Contracts\Permission as PermissionContract;
+
+/**
+ * Larasaas\Tenant\Models\Permission
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $guard_name
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @method static \Illuminate\Database\Eloquent\Builder|\Larasaas\Tenant\Models\Permission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Larasaas\Tenant\Models\Permission whereGuardName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Larasaas\Tenant\Models\Permission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Larasaas\Tenant\Models\Permission whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Larasaas\Tenant\Models\Permission whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class Permission extends Model implements PermissionContract
+{
+    use RefreshesPermissionCache;
+
+    public $guarded = ['id'];
+
+    public function __construct(array $attributes = [])
+    {
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+
+        parent::__construct($attributes);
+
+        $this->setTable(config('permission.table_names.permissions'));
+    }
+
+    public static function create(array $attributes = [])
+    {
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+
+        if (static::getPermissions()->where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
+            throw PermissionAlreadyExists::create($attributes['name'], $attributes['guard_name']);
+        }
+
+        if (isNotLumen() && app()::VERSION < '5.4') {
+            return parent::create($attributes);
+        }
+
+        return static::query()->create($attributes);
+    }
+
+    /**
+     * A permission can be applied to roles.
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            config('permission.models.role'),
+            config('permission.table_names.role_has_permissions')
+        );
+    }
+
+    /**
+     * A permission belongs to some users of the model associated with its guard.
+     */
+    public function users(): MorphToMany
+    {
+        return $this->morphedByMany(
+            getModelForGuard($this->attributes['guard_name']),
+            'model',
+            config('permission.table_names.model_has_permissions'),
+            'permission_id',
+            'model_id'
+        );
+    }
+
+    /**
+     * Find a permission by its name (and optionally guardName).
+     *
+     * @param string $name
+     * @param string|null $guardName
+     *
+     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+     *
+     * @return \Spatie\Permission\Contracts\Permission
+     */
+    public static function findByName(string $name, $guardName = null): PermissionContract
+    {
+        $guardName = $guardName ?? config('auth.defaults.guard');
+
+        $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
+
+        if (! $permission) {
+            throw PermissionDoesNotExist::create($name, $guardName);
+        }
+
+        return $permission;
+    }
+
+    /**
+     * Get the current cached permissions.
+     */
+    protected static function getPermissions(): Collection
+    {
+        return app(PermissionRegistrar::class)->getPermissions();
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "name": "larasaas/tenant",
+    "description": "用于租户创建及管理，实现按租户查询的数据隔离。",
+    "keywords": ["tenant", "Global Query Scope"],
+    "homepage": "https://github.com/larasaas/tenant",
+    "type": "library",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/larasaas/tenant/issues",
+        "source": "https://github.com/larasaas/tenant"
+    },
+    "authors": [
+        {
+            "name": "ikodota",
+            "email": "ikodota@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "hipsterjazzbo/landlord": "^2.0",
+        "paulvl/jwt-guard": "1.*"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Larasaas\\": "src/Tenant"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/Tenant"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "repositories": {
+        "larasaas/laravel-permission": {
+            "type": "path",
+            "url": "/Users/zhoujun/dev/php/packages/larasaas/laravel-permission"
+        }
+    }
+
+}
