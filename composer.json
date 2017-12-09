@@ -1,5 +1,5 @@
 {
-    "name": "larasaas/tenant",
+    "name": "larasaas/multi-tenant",
     "description": "用于租户创建及管理，实现按租户查询的数据隔离。",
     "keywords": ["tenant", "Global Query Scope"],
     "homepage": "https://github.com/larasaas/tenant",
