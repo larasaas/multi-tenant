@@ -5,6 +5,7 @@ namespace Larasaas\Tenant\Scopes;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class TenantScope implements Scope
 {
@@ -17,7 +18,11 @@ class TenantScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $tenant=$model::getTenant();
-        return $builder->where($tenant['column'], $tenant['id']);
+        $tenantColumn=$model->getTenantColumns()[0];
+        if( Auth::guard('jwt')->guest()){
+            return $builder->where($tenantColumn, 0);
+        }
+        return $builder->where($tenantColumn, Auth::guard('jwt')->user()->id);
+
     }
 }

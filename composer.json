@@ -34,12 +34,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "repositories": {
-        "larasaas/laravel-permission": {
-            "type": "path",
-            "url": "/Users/zhoujun/dev/php/packages/larasaas/laravel-permission"
-        }
     }
 
 }
