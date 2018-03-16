@@ -35,6 +35,8 @@ class ValidJwt
                         $tenant_id=$user->tenant_id;
                         //设置租户
                         Landlord::addTenant("tenant_id",$tenant_id);
+                        session()->put('tenant_id',$tenant_id);
+                        session()->put('user',$user);
 
 //                        $tenant = Tenant::findOrFail($tenant_id);
 //                        Landlord::addTenant($tenant);
