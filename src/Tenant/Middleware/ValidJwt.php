@@ -5,6 +5,7 @@ namespace Larasaas\Tenant\Middleware;
 use Closure;
 use HipsterJazzbo\Landlord\Facades\Landlord;
 use Illuminate\Support\Facades\Auth;
+use Paulvl\JWTGuard\JWT\Token\CommonJWT;
 
 class ValidJwt
 {
@@ -18,56 +19,54 @@ class ValidJwt
      */
     public function handle($request, Closure $next, $tokenType = 'api_token', $guard = 'jwt')
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            if (($errors = Auth::guard($guard)->validateToken($tokenType)) === true ) {
-                if (Auth::guard($guard)->tokenIsApi()) {
-                    if (Auth::guard($guard)->guest()) {
-                        response()->json([
-                            'code'=>401,
-                            'message' => '未登录，请求的资源不允许访问',
-                            'errors'=>[],
-                        ], 200);
-                    }else{
-//                        print_r(Auth::guard($guard)->user());die();
-//                        登录验证后开始做租户限制
-                        $user=Auth::guard('jwt')->user();
-//                        在之前验证登录租户(员工/顾客/超级管理员)
-                        $tenant_id=$user->tenant_id;
-                        //设置租户
-                        Landlord::addTenant("tenant_id",$tenant_id);
-                        session()->put('tenant_id',$tenant_id);
-                        session()->put('user',$user);
 
-//                        $tenant = Tenant::findOrFail($tenant_id);
-//                        Landlord::addTenant($tenant);
+        $secret_key=config('jwt.secret_key');
 
-                        return $next($request);
-//                        return $next(request());
-                    }
-                }else{
+        $api_token=$request->header('authorization');
 
-                    return response()->json([
-                        'code'=>401,
-                        'message' => 'token is not api',
-                        'errors'=>[],
-                    ], 200);
-                }
-            } else {
-                return response()->json([
-                    'code'=>401,
-                    'message' => $errors['message'],
-                    'errors'=>[],
-                ], 200);
-            }
-        }else {
-//            return response()->json(['code'=>422,'message' =>'Request must accept a json response.','errors'=>[]],200);
-//            基于安全考虑不显示。
-            die('No way');
+        $api_token= substr($api_token,7);
 
+        $jwt= new CommonJWT(
+            $api_token,
+            $secret_key
+        );
 
+        $data=$jwt->get();
 
-        }
+        $user_id=$data->user_id;
+        print_r($data);die();
+//        $tenant_id=$data->tenant_id;
+        Landlord::addTenant("tenant_id",$tenant_id);
 
+        return $next($request);
 
+//==========
+////        if ($request->ajax() || $request->wantsJson()) {
+//            if (($errors = Auth::guard($guard)->validateToken($tokenType)) === true ) {
+//
+//                    if (Auth::guard($guard)->guest()) {
+//                        return response()->json('Unauthorized.', 401);
+//                    }else{
+//                        //登录验证后开始做租户限制
+//                        $user=Auth::guard('jwt')->user();
+//                        //在之前验证登录租户(员工/顾客/超级管理员)
+//                        $tenant_id=$user->tenant_id;
+//                        //设置租户
+//                        Landlord::addTenant("tenant_id",$tenant_id);
+////                        $tenant = Tenant::findOrFail($tenant_id);
+////                        Landlord::addTenant($tenant);
+//                    }
+//
+////
+////                }
+//
+//            } else {
+//                return response()->json(['error' => $errors['message']], $errors['code']);
+//            }
+////        } else {
+////            return response()->json(['error' =>'Request must accept a json response.'], 422);
+////        }
+
+//        return $next($request);
     }
 }
