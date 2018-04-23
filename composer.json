@@ -34,12 +34,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "repositories": {
-        "larasaas/laravel-permission": {
-            "type": "git",
-            "url": "git@github.com:larasaas/multi-tenant.git"
-        }
     }
 
 }
