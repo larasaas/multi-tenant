@@ -32,11 +32,19 @@ class ValidJwt
         );
 
         $data=$jwt->get();
+        if(empty($data)){
+            return response()->json(['error' => '401'], '-1');
+        }
 
-        $user_id=$data->user_id;
-        print_r($data);die();
-//        $tenant_id=$data->tenant_id;
+        //测试是否验证登录
+//        $user=Auth::user();
+//        print_r(Auth::user());die();
+        
+//        $user_id=$data->user_id;
+        $tenant_id=$data->tenant_id;
         Landlord::addTenant("tenant_id",$tenant_id);
+
+
 
         return $next($request);
 

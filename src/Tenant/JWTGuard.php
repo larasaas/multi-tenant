@@ -21,6 +21,10 @@ class JWTGuard implements Guard, JWTGuardInterface
         $this->jwtManager = $jwtManager;
         $this->inputKey = 'api_token';
     }
+    public function user()
+    {
+        return $this->getUserFromToken();
+    }
 
     public function getUserFromToken()
     {
