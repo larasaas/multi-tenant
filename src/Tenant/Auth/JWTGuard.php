@@ -5,9 +5,9 @@ namespace Larasaas\Tenant\Auth;
 //use Illuminate\Auth\GuardHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
-//use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\UserProvider;
 
-use Larasaas\Tenant\Providers\UserProvider;
+// use Larasaas\Tenant\Providers\UserProvider;
 use Paulvl\JWTGuard\JWT\Token\CommonJWT;
 use Paulvl\JWTGuard\JWT\Token\RefreshJWT;
 use Paulvl\JWTGuard\JWT\JWTManager;
