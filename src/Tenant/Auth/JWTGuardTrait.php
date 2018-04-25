@@ -1,6 +1,6 @@
 <?php
 
-namespace Larasaas\Tenant;
+namespace Larasaas\Tenant\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -158,6 +158,7 @@ trait JWTGuardTrait
      */
     public function validate(array $credentials = [])
     {
+
         if ($this->provider->retrieveByCredentials($credentials)) {
             return true;
         }
@@ -215,6 +216,8 @@ trait JWTGuardTrait
 
         return $this;
     }
+
+
 
     public function issueToken(AuthenticatableContract $user)
     {

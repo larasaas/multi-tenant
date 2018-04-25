@@ -1,6 +1,6 @@
 <?php
 
-namespace Larasaas\Tenant;
+namespace Larasaas\Tenant\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;

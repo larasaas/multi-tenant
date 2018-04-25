@@ -22,7 +22,8 @@ class TenantScope implements Scope
         if( Auth::guard('jwt')->guest()){
             return $builder->where($tenantColumn, 0);
         }
-        return $builder->where($tenantColumn, Auth::guard('jwt')->user()->id);
+
+        return $builder->where($tenantColumn, Auth::guard('jwt')->user()->tenant_id);
 
     }
 }

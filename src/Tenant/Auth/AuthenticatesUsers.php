@@ -1,6 +1,6 @@
 <?php
 
-namespace Larasaas\Tenant;
+namespace Larasaas\Tenant\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -145,7 +145,7 @@ trait AuthenticatesUsers
      */
     public function username()
     {
-        return 'email';
+        return 'mobile';
     }
 
     /**

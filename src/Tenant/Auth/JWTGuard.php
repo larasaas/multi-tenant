@@ -1,18 +1,20 @@
 <?php
 
-namespace Larasaas\Tenant;
+namespace Larasaas\Tenant\Auth;
 
-use Illuminate\Auth\GuardHelpers;
+//use Illuminate\Auth\GuardHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\UserProvider;
+//use Illuminate\Contracts\Auth\UserProvider;
+
+use Larasaas\Tenant\Providers\UserProvider;
 use Paulvl\JWTGuard\JWT\Token\CommonJWT;
 use Paulvl\JWTGuard\JWT\Token\RefreshJWT;
 use Paulvl\JWTGuard\JWT\JWTManager;
 
 class JWTGuard implements Guard, JWTGuardInterface
 {
-    use GuardHelpers, JWTGuardTrait;
+    use GuardHelpersTrait, JWTGuardTrait ;
 
     public function __construct(UserProvider $provider, Request $request, JWTManager $jwtManager)
     {
@@ -21,14 +23,12 @@ class JWTGuard implements Guard, JWTGuardInterface
         $this->jwtManager = $jwtManager;
         $this->inputKey = 'api_token';
     }
-    public function user()
-    {
-        return $this->getUserFromToken();
-    }
+
 
     public function getUserFromToken()
     {
         if ($this->token() instanceof CommonJWT && $this->validateToken() === true) {
+
             return $this->provider->retrieveById($this->token()->get()->user_id);
         }
 

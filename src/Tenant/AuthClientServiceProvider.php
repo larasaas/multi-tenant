@@ -4,10 +4,11 @@ namespace Larasaas\Tenant;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Larasaas\Tenant\Auth\JWTGuard;
+use Larasaas\Tenant\Providers\JWTUserProvider;
 use Paulvl\JWTGuard\JWT\JWTManager;
 use Paulvl\JWTGuard\Support\Serializer;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthClientServiceProvider extends ServiceProvider
 {
     /**
      * Register any application authentication / authorization services.
@@ -18,9 +19,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->publishes([__DIR__.'/../../config/jwt.php' => config_path('jwt.php')], 'config');
 
-        $this->app['auth']->extend('jwt', function($app, $name, array $config) {
+        $this->app['auth']->extend('jwt', function($app, $name, array $config)  {
             return new JWTGuard(
-                $app['auth']->createUserProvider($config['provider']),
+                new JWTUserProvider(),
                 $app['request'],
                 new JWTManager(
                     config('jwt.secret_key'),
@@ -40,6 +41,7 @@ class AuthServiceProvider extends ServiceProvider
                 config('jwt.refresh_token_duration')
             );
         });
+
 
         $this->app->bind('jwt-auth-serializer', function()
         {
