@@ -8,6 +8,7 @@
 
 namespace Larasaas\Tenant\Auth;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
