@@ -22,9 +22,12 @@ class ValidJwt
 
         $secret_key=config('jwt.secret_key');
 
-        $api_token=$request->header('authorization');
-
-        $api_token= substr($api_token,7);
+        if($request->api_token){
+            $api_token=$request->api_token;
+        }else{
+            $api_token=$request->header('authorization');
+            $api_token= substr($api_token,7);
+        }
 
         $jwt= new CommonJWT(
             $api_token,
@@ -33,7 +36,8 @@ class ValidJwt
 
         $data=$jwt->get();
         if(empty($data)){
-            return response()->json(['error' => '401'], '-1');
+            // return response()->json(['error' => 'Unauthorized'], '401');
+            return response()->json('Unauthorized.', 401);
         }
 
         //测试是否验证登录
