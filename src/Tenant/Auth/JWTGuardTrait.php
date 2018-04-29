@@ -4,6 +4,8 @@ namespace Larasaas\Tenant\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Larasaas\Tenant\Model;
+use Larasaas\Tenant\Tenant;
 use Paulvl\JWTGuard\JWT\Token\TokenInterface;
 use Paulvl\JWTGuard\JWT\Token\CommonJWT;
 use Paulvl\JWTGuard\JWT\Token\RefreshJWT;
@@ -221,6 +223,19 @@ trait JWTGuardTrait
 
     public function issueToken(AuthenticatableContract $user)
     {
-        return $this->jwtManager->issue(['user_id' => $user->id,'username'=>$user->name,'tenant_id'=>$user->tenant_id]);
+        $tenant= Tenant::find($user->tenant_id);
+        return $this->jwtManager->issue([
+            'tenant_id'=>$user->tenant_id,
+            'user_id' => $user->id,
+            'account' =>$user->account,
+            'username'=>$user->name,
+            'is_admin'=>$user->is_admin,
+            'type'=>$tenant->type,
+            'expire_date'=>$tenant->expire_date
+
+        ]);
+//        return $this->jwtManager->issue($user);
+
+
     }
 }
