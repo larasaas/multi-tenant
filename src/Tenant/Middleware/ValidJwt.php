@@ -36,7 +36,6 @@ class ValidJwt
 
         $data=$jwt->get();
         if(empty($data)){
-            // return response()->json(['error' => 'Unauthorized'], '401');
             return response()->json('Unauthorized.', 401);
         }
 

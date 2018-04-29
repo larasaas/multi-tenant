@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TenantScope implements Scope
 {
+    private $tenantColumn;
+    public function __construct($tenantColumns)
+    {
+        $this->tenantColumn=$tenantColumns[0];
+    }
+
     /**
      * Apply the scope to a given Eloquent query builder.
      *
@@ -18,7 +24,8 @@ class TenantScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $tenantColumn=$model->getTenantColumns()[0];
+//        $tenantColumn=$model->getTenantColumns()[0];
+        $tenantColumn=$this->tenantColumn;
         if( Auth::guard('jwt')->guest()){
             return $builder->where($tenantColumn, 0);
         }
