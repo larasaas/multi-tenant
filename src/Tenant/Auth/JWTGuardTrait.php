@@ -226,12 +226,12 @@ trait JWTGuardTrait
         $tenant= Tenant::find($user->tenant_id);
         return $this->jwtManager->issue([
             'tenant_id'=>$user->tenant_id,
-            'user_id' => $user->id,
+            'tenant_type'=>$tenant->type,
+            'id' => $user->id,
             'account' =>$user->account,
-            'username'=>$user->name,
-            'is_admin'=>$user->is_admin,
-            'type'=>$tenant->type,
-            'expire_date'=>$tenant->expire_date
+            'name'=>$user->name,
+            'is_admin'=>$user->is_admin
+
 
         ]);
 //        return $this->jwtManager->issue($user);
