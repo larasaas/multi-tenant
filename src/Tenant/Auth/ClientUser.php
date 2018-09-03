@@ -38,7 +38,7 @@ class ClientUser
      */
     public function getAuthIdentifier()
     {
-        return 'mobile';
+        return 'account';
     }
 
     /**
