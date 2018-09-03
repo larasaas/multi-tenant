@@ -224,15 +224,23 @@ trait JWTGuardTrait
     public function issueToken(AuthenticatableContract $user)
     {
         $tenant= Tenant::find($user->tenant_id);
+//        return $this->jwtManager->issue([
+//            'tenant_id'=>$user->tenant_id,
+//            'tenant_type'=>$tenant->type,
+//            'id' => $user->id,
+//            'account' =>$user->account,
+//            'account_type'=>$user->account_type,
+//            'name'=>$user->name,
+//            'is_admin'=>$user->is_admin
+//        ]);
         return $this->jwtManager->issue([
-            'tenant_id'=>$user->tenant_id,
-            'tenant_type'=>$tenant->type,
+            't_i'=>$user->tenant_id,
+            't_t'=>$tenant->type,
             'id' => $user->id,
-            'account' =>$user->account,
-            'name'=>$user->name,
-            'is_admin'=>$user->is_admin
-
-
+            'ac' =>$user->account,
+            'ac_t'=>$user->account_type,
+            'na'=>$user->name,
+            'is_a'=>$user->is_admin,
         ]);
 //        return $this->jwtManager->issue($user);
 

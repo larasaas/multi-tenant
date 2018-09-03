@@ -56,14 +56,23 @@ class JWTUserProvider implements UserProvider
 
         $jwt_data= JWTManager::decode($token,true);
 
+//        $user=[
+//            'tenant_id'=>$jwt_data->tenant_id,
+//            'tenant_type'=>$jwt_data->tenant_type,
+//            'id'=>$jwt_data->id,
+//            'name'=>$jwt_data->name,
+//            'account'=>$jwt_data->account,
+//            'account_type'=>$jwt_data->account_type,
+//            'is_admin'=>$jwt_data->is_admin,
+//        ];
         $user=[
-            'tenant_id'=>$jwt_data->tenant_id,
-            'tenant_type'=>$jwt_data->tenant_type,
+            'tenant_id'=>$jwt_data->t_i,
+            'tenant_type'=>$jwt_data->t_t,
             'id'=>$jwt_data->id,
-            'name'=>$jwt_data->name,
-            'account'=>$jwt_data->account,
-            'is_admin'=>$jwt_data->is_admin,
-
+            'name'=>$jwt_data->na,
+            'account'=>$jwt_data->ac,
+            'account_type'=>$jwt_data->ac_t,
+            'is_admin'=>$jwt_data->is_a,
         ];
 //        print_r($user);die();
 //        return $user;
