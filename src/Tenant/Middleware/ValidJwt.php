@@ -46,7 +46,7 @@ class ValidJwt
 //        $user_id=$data->user_id;
 
 
-        $tenant_id=$data->tenant_id;
+        $tenant_id=$data->t_i;
         Landlord::addTenant("tenant_id",$tenant_id);
 
 
