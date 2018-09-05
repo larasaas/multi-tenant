@@ -5,8 +5,8 @@ namespace Larasaas\Tenant;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Larasaas\Tenant\Auth\JWTGuard;
 use Larasaas\Tenant\Providers\JWTUserProvider;
-use Paulvl\JWTGuard\JWT\JWTManager;
-use Paulvl\JWTGuard\Support\Serializer;
+use Larasaas\Tenant\JWT\JWTManager;
+use Larasaas\Tenant\Support\Serializer;
 
 class AuthClientServiceProvider extends ServiceProvider
 {
