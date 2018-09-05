@@ -66,13 +66,13 @@ class JWTUserProvider implements UserProvider
 //            'is_admin'=>$jwt_data->is_admin,
 //        ];
         $user=[
-            'tenant_id'=>$jwt_data->t_i,
-            'tenant_type'=>$jwt_data->t_t,
             'id'=>$jwt_data->id,
-            'name'=>$jwt_data->na,
-            'account'=>$jwt_data->ac,
-            'account_type'=>$jwt_data->ac_t,
-            'is_admin'=>$jwt_data->is_a,
+            'tenant_id'=>$jwt_data->data->t_i,
+            'tenant_type'=>$jwt_data->data->t_t,
+            'name'=>$jwt_data->data->na,
+            'account'=>$jwt_data->data->ac,
+            'account_type'=>$jwt_data->data->ac_t,
+            'is_admin'=>$jwt_data->data->is_a,
         ];
 //        print_r($user);die();
 //        return $user;
