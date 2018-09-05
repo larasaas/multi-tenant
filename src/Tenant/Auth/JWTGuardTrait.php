@@ -2,6 +2,7 @@
 
 namespace Larasaas\Tenant\Auth;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Larasaas\Tenant\Model;
@@ -32,6 +33,31 @@ trait JWTGuardTrait
 
     protected $token;
 
+    //直接以一个user登录
+    public function login($user)
+    {
+        return $this->issueToken($user);
+    }
+
+    public function tokenById($id)
+    {
+        $user=User::findOrFail($id);
+        return $this->issueToken($user);
+    }
+
+    public function preload()
+    {
+        $rawToken = $this->getTokenForRequest();
+//        echo $rawToken; die();
+        $jwt = new CommonJWT(
+            $rawToken,
+            config('jwt.secret_key'),
+            config('jwt.jwt_token_duration')
+        );
+
+        return  $jwt->get();
+
+    }
     /**
      * Get the currently authenticated user.
      *
@@ -234,13 +260,15 @@ trait JWTGuardTrait
 //            'is_admin'=>$user->is_admin
 //        ]);
         return $this->jwtManager->issue([
-            't_i'=>$user->tenant_id,
-            't_t'=>$tenant->type,
             'id' => $user->id,
-            'ac' =>$user->account,
-            'ac_t'=>$user->account_type,
-            'na'=>$user->name,
-            'is_a'=>$user->is_admin,
+            'data'=>[
+                't_i'=>$user->tenant_id,
+                't_t'=>$tenant->type,
+                'ac' =>$user->account,
+                'ac_t'=>$user->account_type,
+                'na'=>$user->name,
+                'is_a'=>$user->is_admin,
+            ]
         ]);
 //        return $this->jwtManager->issue($user);
 
