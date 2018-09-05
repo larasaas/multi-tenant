@@ -10,7 +10,7 @@ use Illuminate\Contracts\Auth\UserProvider;
 // use Larasaas\Tenant\Providers\UserProvider;
 use Paulvl\JWTGuard\JWT\Token\CommonJWT;
 use Paulvl\JWTGuard\JWT\Token\RefreshJWT;
-use Paulvl\JWTGuard\JWT\JWTManager;
+use Larasaas\Tenant\JWT\JWTManager;
 
 class JWTGuard implements Guard, JWTGuardInterface
 {
