@@ -5,6 +5,7 @@ namespace Larasaas\Tenant\Middleware;
 use Closure;
 use HipsterJazzbo\Landlord\Facades\Landlord;
 use Illuminate\Support\Facades\Auth;
+use Paulvl\JWTGuard\JWT\Token\CommonJWT;
 
 class ValidJwt
 {
