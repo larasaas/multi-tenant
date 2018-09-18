@@ -51,7 +51,7 @@ class ValidJwt
                return response()->json('Unauthorized.', 401);
            }
 
-           $tenant_id=$data->t_i;
+           $tenant_id=$data->data->t_i;
            Landlord::addTenant("tenant_id",$tenant_id);
         }
 
