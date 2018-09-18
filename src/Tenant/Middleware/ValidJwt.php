@@ -34,7 +34,24 @@ class ValidJwt
                 return response()->json(['error' => $errors['message']], $errors['code']);
             }
         } else {
-            return response()->json(['error' =>'Request must accept a json response.'], 422);
+            //return response()->json(['error' =>'Request must accept a json response.'], 422);
+            $secret_key=config('jwt.secret_key');
+           if(! $request->api_token){
+               return response()->json('Unauthorized.', 401);
+           }
+           $api_token=$request->api_token;
+           $jwt= new CommonJWT(
+               $api_token,
+               $secret_key
+           );
+
+           $data=$jwt->get();
+           if(empty($data)){
+               return response()->json('Unauthorized.', 401);
+           }
+
+           $tenant_id=$data->t_i;
+           Landlord::addTenant("tenant_id",$tenant_id);
         }
 
         return $next($request);
