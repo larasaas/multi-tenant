@@ -57,7 +57,7 @@ class JWTManager
 
             $refreshTokenData = array(
                 "jti"   => $refreshTokenJit,
-                "exp"   => $apiToken->exp(),
+//                "exp"   => $apiToken->exp(),  //千万不能要，下面merge的时候，refresh_token的过期时间不对。
                 "nbf"   => $apiToken->nbf(),
                 "rtt"   => $apiToken->jti()
             );
